@@ -2,6 +2,7 @@
 FROM node:13.12.0-alpine as build
 WORKDIR /app
 COPY package*.json ./
+RUN npm cache clean && npm install -g npm@latest
 RUN npm install --verbose
 COPY . ./
 RUN npm run build
