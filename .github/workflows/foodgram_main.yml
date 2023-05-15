@@ -51,7 +51,7 @@ jobs:
         with:
           context: frontend/
           push: true
-          tags: gringo1314/foodgramm_front:v1.0
+          tags: gringo1314/foodgramm_front:latest
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
