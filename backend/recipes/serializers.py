@@ -27,15 +27,12 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
         model = IngredientsInRecipe
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
-    validators = (
-        validators.UniqueTogetherValidator(
-            queryset=IngredientsInRecipe.objects.all(),
-            fields=('ingredient', 'recipe')
-        ),
-    )
-
-    def __str__(self):
-        return f'{self.ingredient} in {self.recipe}'
+        validators = (
+            validators.UniqueTogetherValidator(
+                queryset=IngredientsInRecipe.objects.all(),
+                fields=('ingredient', 'recipe')
+            ),
+        )
 
 
 class AddIngredientSerializer(serializers.ModelSerializer):
@@ -116,14 +113,15 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def create_ingredients(self, ingredients, recipe):
+        ingredients_list = []
         for ingredient in ingredients:
             amount = ingredient['amount']
-            ingredient = ingredient['id']
-            ingredients, created = IngredientsInRecipe.objects.get_or_create(
-                recipe=recipe,
-                ingredient=ingredient,
-                amount=amount
-            )
+            ingredient_id = ingredient['id']
+            ingredient_obj = IngredientsInRecipe(
+                recipe=recipe, ingredient_id=ingredient_id, amount=amount)
+            ingredients_list.append(ingredient_obj)
+        IngredientsInRecipe.objects.bulk_create(
+            ingredients_list, ignore_conflicts=True)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -151,23 +149,23 @@ class AddRecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Поле с ингредиентами не может быть пустым'
             )
-        unique_ings = []
+        unique_ings = set()
         for ingredient in ings:
             name = ingredient['id']
-            if int(ingredient['amount']) <= 0:
+            amount = ingredient['amount']
+            if amount <= 0:
                 raise serializers.ValidationError(
                     f'Не корректное количество для {name}'
                 )
-            if not isinstance(ingredient['amount'], int):
+            if not isinstance(amount, int):
                 raise serializers.ValidationError(
                     'Количество ингредиентов должно быть целым числом'
                 )
-            if name not in unique_ings:
-                unique_ings.append(name)
-            else:
+            if name in unique_ings:
                 raise serializers.ValidationError(
                     'В рецепте не может быть повторяющихся ингредиентов'
                 )
+            unique_ings.add(name)
         return data
 
     def validate_cooking_time(self, data):

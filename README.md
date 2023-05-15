@@ -15,6 +15,8 @@ docker-compose exec backend python manage.py collectstatic --no-input
 docker-compose exec backend python manage.py import_ings ingredients.csv
 
 docker-compose exec backend python manage.py import_tags tags.csv
+
+docker-compose exec backend python manage.py import_recipes recipes.csv
 ```
 # .env
 ```
