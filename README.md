@@ -142,11 +142,11 @@ http://158.160.5.6/recipes
 http://158.160.5.6/admin
 ```
 
-###Почта и пароль суперюзера:
-email: 'ShadowMoses1314@mail.ru'
-Password:'Admin'
+### Почта и пароль суперюзера:
+email:  `ShadowMoses1314@mail.ru `
+Password: `Admin `
 
 
-### *Backend написан:*
+#### *Backend написан:*
 [ShadowMoses1314](https://github.com/Shadowmoses1314)
 
