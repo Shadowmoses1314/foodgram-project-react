@@ -10,8 +10,8 @@ services:
   backend:
     image: gringo1314/foodgramm_back:latest    
     restart: always
-    ports:
-    - 8000:8000
+    expose:
+      - 8000
     volumes:
       - static_value:/app/backend_static/
       - media_value:/app/backend_media/
