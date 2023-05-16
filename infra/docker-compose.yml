@@ -8,10 +8,10 @@ services:
     env_file:
       - ./.env
   backend:
-    image: gringo1314/foodgramm_back:v5.0     
+    image: gringo1314/foodgramm_back:latest    
     restart: always
-    expose:
-      - 8000
+    ports:
+    - 8000:8000
     volumes:
       - static_value:/app/backend_static/
       - media_value:/app/backend_media/
@@ -20,7 +20,7 @@ services:
     env_file:
       - ./.env
   frontend:
-    image: gringo1314/foodgramm_front:v1.0
+    image: gringo1314/foodgramm_front:latest
     volumes:
       - ../frontend/:/app/result_build/
   nginx:
